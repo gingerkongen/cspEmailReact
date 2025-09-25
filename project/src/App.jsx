@@ -1,33 +1,43 @@
-import { useEffect, useState } from 'react';
-import { jwtDecode } from "jwt-decode";
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
-import LoginPage from './pages/LoginPage';
-import HomePage from './pages/HomePage';
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import ProtectedRoute from './utils/ProtectedRoute';
+import LoginPage from "./pages/LoginPage";
+import HomePage from "./pages/HomePage";
+import FilterRecieversPage from "./pages/FilterRecieversPage";
 
-import {AuthProvider} from './context/AuthContext';
+import ProtectedRoute from "./utils/ProtectedRoute";
+
+import { AuthProvider } from "./context/AuthContext";
+
+import Navbar from "./components/NavBar";
 
 function App() {
-
+  const CLIENT_ID =
+    "33693852663-dlrccj4ptirhmjjffdppjkki8gn5jbsh.apps.googleusercontent.com";
 
   return (
-<BrowserRouter>
-      <AuthProvider>
-        
-        <Routes>
+    <BrowserRouter>
+      <GoogleOAuthProvider clientId={CLIENT_ID}>
+        <AuthProvider>
+          <Navbar />
+          <Routes>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/home" element={<HomePage />} />
+            </Route>
+            <Route element={<ProtectedRoute />}>
+              <Route
+                path="/filter-recievers"
+                element={<FilterRecieversPage />}
+              />
+            </Route>
 
-          <Route element={<ProtectedRoute />}>
-            <Route path='/home' element={<HomePage />} />
-          </Route>
-
-          <Route path='' element={<LoginPage />} />
-
-        </Routes>
-      </AuthProvider>
+            <Route path="" element={<LoginPage />} />
+          </Routes>
+        </AuthProvider>
+      </GoogleOAuthProvider>
     </BrowserRouter>
-  )
+  );
 }
 
-export default App
+export default App;
