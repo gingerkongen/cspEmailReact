@@ -14,8 +14,10 @@
     "@tailwindcss/vite": "^4.1.13",
     "jwt-decode": "^4.0.0",
     "react": "^19.1.1",
+    "react-data-table-component": "^7.7.0",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
+    "styled-components": "^6.1.19",
     "tailwindcss": "^4.1.13"
   },
   "devDependencies": {

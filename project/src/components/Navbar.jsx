@@ -12,15 +12,15 @@ const Navbar = () => {
     <>
       {authToken ? (
         <nav
-          className="fixed top-0 z-50 w-full py-3 backdrop-blur-lg border-b
+          className="fixed top-0 z-50 w-full  backdrop-blur-lg border-b
     border-neutral-700/80"
         >
-          <div className="flex justify-between items-center px-6 h-20">
+          <div className="flex justify-between items-center h-17">
             <div className="flex items-center px-10">
-              <img className="h-25 w-25" src={logo} alt="logo" />
+              <img className="h-15 w-15" src={logo} alt="logo" />
             </div>
 
-            <ul className="hidden lg:flex gap-80 text-3xl">
+            <ul className="flex flex-nowrap items-center gap-8 md:gap-12">
               <li>
                 <a href="/filter-recievers">Filter recievers</a>
               </li>

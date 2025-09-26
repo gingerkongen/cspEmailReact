@@ -2,7 +2,15 @@ const SelectSheetButton = ({ onClick }) => {
   return (
     <button
       onClick={onClick}
-      className="py-2 px-3 backdrop-blur-lg border text-2xl h-20 w-50 rounded-md cursor-pointer hover:scale-105"
+      className="
+    inline-flex items-center justify-center
+    px-4 h-10
+    min-w-[200px]
+    bg-gradient-to-br from-white to-blue-50 border rounded-md
+    cursor-pointer
+
+    hover:scale-105
+  "
     >
       Select spreadsheet
     </button>

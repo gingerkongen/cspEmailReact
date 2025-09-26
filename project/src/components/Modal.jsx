@@ -15,8 +15,8 @@ const Modal = ({ open, onClose, children }) => {
         bg-white rounded-xl shadow p-6 transition-all
         ${
           open
-            ? "scale-100 opacity-100 overflow-scroll w-[800px] h-[600px] "
-            : "scale-125 opacity-0 overflow-hidden  w-[800px] h-[600px] "
+            ? "scale-100 opacity-100 overflow-scroll w-[600px] h-[400px] "
+            : "scale-125 opacity-0 overflow-hidden  w-[600px] h-[400px] "
         }
         `}
       >

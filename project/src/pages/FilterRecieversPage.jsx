@@ -5,6 +5,8 @@ import backgroundImage from "../assets/Background.png";
 import SelectSheetButton from "../components/SelectSheetButton";
 import Filters from "../components/Filters";
 import Modal from "../components/Modal";
+import Spreadsheet from "../components/Spreadsheet";
+import Search from "../components/Search";
 
 import { AuthContext } from "../context/AuthContext";
 
@@ -13,6 +15,10 @@ const FilterRecieversPage = () => {
 
   const [openModal, setOpenModal] = useState(false);
   const [sheets, setSheets] = useState();
+  //using a simple medallion-like architecture where gold equals the final email recievers
+  const [bronzeData, setBronzeData] = useState();
+  const [silverData, setSilverData] = useState();
+  const [goldData, setGoldData] = useState();
 
   const handleSelectSheetButtonClick = () => {
     toggleModal();
@@ -46,7 +52,12 @@ const FilterRecieversPage = () => {
       if (!sheetId) {
         throw new Error(`Could not fetch selected sheet`);
       }
-      const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}`;
+      setBronzeData(null);
+      const rangesD1 = "ranges=D1-TOP!A1:G250&ranges=D1-BOTTOM!A1:G250";
+      const rangesD2 = "ranges=D2-TOP!A1:G250&ranges=D2-BOTTOM!A1:G250";
+      const rangesD3 = "ranges=D3-TOP!A1:G250&ranges=D3-BOTTOM!A1:G250";
+      const rangesNaia = "ranges=NAIA!A1:G250";
+      const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values:batchGet?${rangesD1}&${rangesD2}&${rangesD3}&${rangesNaia}`;
       const response = await fetch(sheetUrl, {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -54,7 +65,32 @@ const FilterRecieversPage = () => {
       });
       if (response) {
         const rawSheetData = await response.json();
-        console.log(rawSheetData);
+
+        const parsedAll = rawSheetData.valueRanges.map((vr) => {
+          const values = vr.values;
+
+          if (values.length === 0) return;
+
+          const [headers, ...rows] = values;
+
+          const cleanRows = rows.filter(
+            (row) =>
+              typeof row[4] === "string" &&
+              row[4].includes("@") &&
+              row[0].length > 0 &&
+              row[1].length > 0 &&
+              row[2].length > 0 &&
+              row[3].length > 0
+          );
+
+          const objects = cleanRows.map((row, i) =>
+            Object.fromEntries(headers.map((h, j) => [h, row[j] ?? ""]))
+          );
+          return objects;
+        });
+        const parsedAndClean = parsedAll.filter((row) => row.length > 0);
+        setOpenModal(false);
+        setBronzeData(parsedAndClean);
       } else {
         throw new Error("No available data for selected sheet");
       }
@@ -66,43 +102,40 @@ const FilterRecieversPage = () => {
   return (
     <>
       <div
-        className="min-h-screen   bg-cover bg-center"
+        className="min-h-screen overflow-x-auto bg-cover bg-center"
         style={{ backgroundImage: `url(${backgroundImage})` }}
       >
-        <Modal open={openModal} onClose={() => setOpenModal(false)}>
-          <h2 className="text-3xl font-semibold mb-4">Select a spreadsheet:</h2>
-          <ul className="border rounded-lg divide-y divide-gray-200">
-            {sheets ? (
-              sheets.map((sheet, i) => (
-                <li
-                  key={i}
-                  onClick={() => handleSelectedSheet(sheet.id)}
-                  className="px-4 text-xl py-3 hover:bg-gray-100 cursor-pointer transition"
-                >
-                  {sheet.name}
-                </li>
-              ))
-            ) : (
-              <li className="px-4 py-3 text-gray-500">
-                No available spreadsheets
-              </li>
-            )}
-          </ul>
-        </Modal>
+        <div className="pt-30 px-20 h-screen">
+          <div>
+            <SelectSheetButton onClick={handleSelectSheetButtonClick} />
+          </div>
 
-        <div className="pt-40 px-20 h-screen">
-          <div className="flex flex-wrap m-10  overflow-x-hidden min-h-[120px] items-center">
-            <div className="w-full sm:w-1/2 md:w-1/3 pl-5 ">
-              <SelectSheetButton
-                onClick={() => handleSelectSheetButtonClick()}
-              />
-            </div>
-            <div className="w-full sm:w-1/2 md:w-1/3 pl-5">
-              <Filters />
-            </div>
+          <div className="pt-5">
+            {bronzeData ? <Spreadsheet data={bronzeData} /> : null}
           </div>
         </div>
       </div>
+
+      <Modal open={openModal} onClose={() => setOpenModal(false)}>
+        <h2 className="text-lg font-semibold mb-4">Select a spreadsheet:</h2>
+        <ul className="border rounded-lg divide-y divide-gray-200">
+          {Array.isArray(sheets) && sheets.length > 0 ? (
+            sheets.map((sheet) => (
+              <li
+                key={sheet.id}
+                onClick={() => handleSelectedSheet(sheet.id)}
+                className="px-4  py-3 hover:bg-gray-100 cursor-pointer transition"
+              >
+                {sheet.name}
+              </li>
+            ))
+          ) : (
+            <li className="px-4 py-3 text-gray-500">
+              No available spreadsheets
+            </li>
+          )}
+        </ul>
+      </Modal>
     </>
   );
 };

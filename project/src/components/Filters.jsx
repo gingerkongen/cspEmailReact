@@ -3,8 +3,8 @@ import React from "react";
 const Filters = () => {
   return (
     <div
-      className="py-2 px-3 backdrop-blur-lg border text-2xl h-20 w-200
-     rounded-md"
+      className="flex  px-3 bg-gradient-to-br from-white to-blue-50 border  
+     rounded-md max-w-[100px] items-center justify-center h-7"
     >
       Filters
     </div>
