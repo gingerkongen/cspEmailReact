@@ -73,11 +73,20 @@ const FilterRecieversPage = () => {
 
           const [headers, ...rows] = values;
 
+          const allowedColumnOne = [
+            "D1-TOP",
+            "D1-BOTTOM",
+            "D2-TOP",
+            "D2-BOTTOM",
+            "D3-TOP",
+            "D3-BOTTOM",
+            "NAIA",
+          ];
           const cleanRows = rows.filter(
             (row) =>
               typeof row[4] === "string" &&
               row[4].includes("@") &&
-              row[0].length > 0 &&
+              allowedColumnOne.includes(row[0]) &&
               row[1].length > 0 &&
               row[2].length > 0 &&
               row[3].length > 0
@@ -90,7 +99,7 @@ const FilterRecieversPage = () => {
         });
         const parsedAndClean = parsedAll.filter((row) => row.length > 0);
         setOpenModal(false);
-        setBronzeData(parsedAndClean);
+        setBronzeData(parsedAndClean.flat());
       } else {
         throw new Error("No available data for selected sheet");
       }
@@ -111,7 +120,12 @@ const FilterRecieversPage = () => {
           </div>
 
           <div className="pt-5">
-            {bronzeData ? <Spreadsheet data={bronzeData} /> : null}
+            {bronzeData ? (
+              <Spreadsheet
+                changedData={(data) => setGoldData(data)}
+                data={bronzeData}
+              />
+            ) : null}
           </div>
         </div>
       </div>

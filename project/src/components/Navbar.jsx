@@ -8,6 +8,8 @@ import LogoutButton from "../components/LogoutButton";
 
 const Navbar = () => {
   const { authToken } = useContext(AuthContext);
+
+  const [page, setPage] = useState("filter");
   return (
     <>
       {authToken ? (
