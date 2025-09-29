@@ -13,6 +13,7 @@ const Spreadsheet = ({ data, changedData }) => {
   const [dataRemovedCoaches, setDataRemovedCoaches] = useState();
   const [displayedData, setDisplayedData] = useState();
   const [filteredData, setFilteredData] = useState();
+  const [searchResetKey, setSearchResetKey] = useState(0);
 
   const columns = [
     { name: "Division", selector: (row) => row.Division, sortable: true },
@@ -73,7 +74,8 @@ const Spreadsheet = ({ data, changedData }) => {
         const divisionFilteredData = dataRemovedCoaches.filter((row) =>
           safeDivisionFilter.includes(row.Division)
         );
-
+        setSearchResetKey((k) => k + 1);
+        onSearch("");
         setFilteredData(divisionFilteredData);
       } catch (error) {
         console.log(error);
@@ -94,6 +96,8 @@ const Spreadsheet = ({ data, changedData }) => {
             (row) => row.Email !== selectedCoach[0].Email
           );
           setFilteredData(removedCoachDataFromFiltered);
+          setSearchResetKey((k) => k + 1);
+          onSearch("");
         }
 
         // alert(
@@ -108,7 +112,7 @@ const Spreadsheet = ({ data, changedData }) => {
   return (
     <div className=" ">
       <div className="flex justify-end">
-        <Search onSearch={onSearch} />
+        <Search onSearch={onSearch} key={searchResetKey} />
         <Filters onFilter={handleFilter} />
       </div>
       <div className="border rounded-md max-h-[70vh] w-full overflow-auto">

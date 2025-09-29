@@ -1,5 +1,4 @@
 import React from "react";
-
 import backgroundImage from "../assets/Background.png";
 
 const HomePage = () => {

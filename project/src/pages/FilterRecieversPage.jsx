@@ -1,24 +1,25 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 
 import backgroundImage from "../assets/Background.png";
 
 import SelectSheetButton from "../components/SelectSheetButton";
-import Filters from "../components/Filters";
 import Modal from "../components/Modal";
 import Spreadsheet from "../components/Spreadsheet";
-import Search from "../components/Search";
 
 import { AuthContext } from "../context/AuthContext";
 
-const FilterRecieversPage = () => {
+const FilterRecieversPage = ({ deliverGoldData }) => {
   const { authToken } = useContext(AuthContext);
 
   const [openModal, setOpenModal] = useState(false);
   const [sheets, setSheets] = useState();
-  //using a simple medallion-like architecture where gold equals the final email recievers
+  //using a simple medallion-like architecture
+  //bronzeData is the raw input data minus unvalid rows (filtered based on missing or misspelled values)
+  //silverData is the data after being filtered by the user within the web app
+  //silverData is passed on to the WriteEmailPage and recieved as gold data,
+  // and equals the actual data used for sending
   const [bronzeData, setBronzeData] = useState();
   const [silverData, setSilverData] = useState();
-  const [goldData, setGoldData] = useState();
 
   const handleSelectSheetButtonClick = () => {
     toggleModal();
@@ -108,6 +109,12 @@ const FilterRecieversPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (silverData) {
+      deliverGoldData(silverData);
+    }
+  }, [silverData]);
+
   return (
     <>
       <div
@@ -122,7 +129,7 @@ const FilterRecieversPage = () => {
           <div className="pt-5">
             {bronzeData ? (
               <Spreadsheet
-                changedData={(data) => setGoldData(data)}
+                changedData={(data) => setSilverData(data)}
                 data={bronzeData}
               />
             ) : null}

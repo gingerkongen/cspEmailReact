@@ -3,8 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 import LoginPage from "./pages/LoginPage";
-import HomePage from "./pages/HomePage";
-import FilterRecieversPage from "./pages/FilterRecieversPage";
+import Home from "./pages/Home";
 
 import ProtectedRoute from "./utils/ProtectedRoute";
 
@@ -20,17 +19,16 @@ function App() {
     <BrowserRouter>
       <GoogleOAuthProvider clientId={CLIENT_ID}>
         <AuthProvider>
-          <Navbar />
           <Routes>
             <Route element={<ProtectedRoute />}>
-              <Route path="/home" element={<HomePage />} />
+              <Route path="/home" element={<Home />} />
             </Route>
-            <Route element={<ProtectedRoute />}>
+            {/* <Route element={<ProtectedRoute />}>
               <Route
                 path="/filter-recievers"
                 element={<FilterRecieversPage />}
               />
-            </Route>
+            </Route> */}
 
             <Route path="" element={<LoginPage />} />
           </Routes>

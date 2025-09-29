@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 
 import { AuthContext } from "../context/AuthContext";
 
@@ -6,10 +6,9 @@ import logo from "../assets/Logo.png.avif";
 
 import LogoutButton from "../components/LogoutButton";
 
-const Navbar = () => {
+const Navbar = ({ handleNavigation }) => {
   const { authToken } = useContext(AuthContext);
 
-  const [page, setPage] = useState("filter");
   return (
     <>
       {authToken ? (
@@ -19,15 +18,30 @@ const Navbar = () => {
         >
           <div className="flex justify-between items-center h-17">
             <div className="flex items-center px-10">
-              <img className="h-15 w-15" src={logo} alt="logo" />
+              <img
+                className="h-15 w-15 cursor-pointer"
+                src={logo}
+                alt="logo"
+                onClick={() => handleNavigation("home")}
+              />
             </div>
 
             <ul className="flex flex-nowrap items-center gap-8 md:gap-12">
               <li>
-                <a href="/filter-recievers">Filter recievers</a>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => handleNavigation("filter")}
+                >
+                  Filter recievers
+                </div>
               </li>
               <li>
-                <a href="write-email">Write email</a>
+                <div
+                  className="cursor-pointer"
+                  onClick={() => handleNavigation("write")}
+                >
+                  Write email
+                </div>
               </li>
             </ul>
 
