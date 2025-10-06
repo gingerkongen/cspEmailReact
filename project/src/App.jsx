@@ -9,7 +9,7 @@ import ProtectedRoute from "./utils/ProtectedRoute";
 
 import { AuthProvider } from "./context/AuthContext";
 
-import Navbar from "./components/NavBar";
+import Navbar from "./components/Navbar";
 
 function App() {
   const CLIENT_ID =
