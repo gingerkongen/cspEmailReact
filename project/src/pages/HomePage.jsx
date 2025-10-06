@@ -4,9 +4,14 @@ import backgroundImage from "../assets/Background.png";
 const HomePage = () => {
   return (
     <div
-      className="min-h-screen   bg-cover bg-center"
+      className="min-h-screen flex items-center justify-center px-4 bg-cover bg-center"
       style={{ backgroundImage: `url(${backgroundImage})` }}
-    ></div>
+    >
+      <div className="flex flex-col text-xl items-center">
+        <div>Home page coming soon...</div>
+        <div>Use the navigation bar to start sending emails</div>
+      </div>
+    </div>
   );
 };
 
