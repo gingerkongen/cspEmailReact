@@ -1,6 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 
 const EmailForm = ({ handleApproveClick }) => {
+  const [emailSubjectText, setEmailSubjectText] = useState("");
+  const [emailBodyText, setEmailBodyText] = useState("");
+
+  const handleSubjectChange = (e) => {
+    setEmailSubjectText(e.target.value);
+  };
+
+  const handleBodyChange = (e) => {
+    setEmailBodyText(e.target.value);
+  };
+
   return (
     <form className="space-y-4 max-w-4xl">
       <div className="space-y-1">
@@ -13,6 +24,8 @@ const EmailForm = ({ handleApproveClick }) => {
             name="subject"
             type="text"
             placeholder="Subject..."
+            onChange={handleSubjectChange}
+            value={emailSubjectText}
             className="w-full h-full bg-transparent outline-none placeholder-neutral-400"
           />
         </div>
@@ -26,6 +39,8 @@ const EmailForm = ({ handleApproveClick }) => {
           <textarea
             id="email-message"
             name="message"
+            onChange={handleBodyChange}
+            value={emailBodyText}
             rows={15}
             placeholder="Write your message..."
             className="w-full bg-transparent outline-none resize-y placeholder-neutral-400"
@@ -42,7 +57,7 @@ const EmailForm = ({ handleApproveClick }) => {
         </button>
         <button
           type="button"
-          onClick={handleApproveClick}
+          onClick={() => handleApproveClick(emailSubjectText, emailBodyText)}
           className="px-4 py-2 rounded-md text-white shadow
                      bg-gradient-to-r from-sky-500 to-blue-600 cursor-pointer hover:scale-110"
         >
