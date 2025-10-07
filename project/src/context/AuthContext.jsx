@@ -11,6 +11,7 @@ export const AuthProvider = ({ children }) => {
   const SCOPES = [
     "https://www.googleapis.com/auth/gmail.send",
     "https://www.googleapis.com/auth/spreadsheets.readonly",
+    "https://www.googleapis.com/auth/drive.metadata.readonly",
   ].join(" ");
 
   const [authToken, setAuthToken] = useState(() =>
