@@ -7,7 +7,7 @@ import HomePage from "./HomePage";
 import WriteEmailPage from "./WriteEmailPage";
 
 const Home = () => {
-  const [displayedPage, setDisplayedPage] = useState("home");
+  const [displayedPage, setDisplayedPage] = useState("filter");
   const [goldData, setGoldData] = useState();
 
   const handleNavigation = (navigatedPage) => {
