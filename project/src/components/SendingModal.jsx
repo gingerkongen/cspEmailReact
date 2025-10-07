@@ -6,6 +6,8 @@ const SendingModal = ({
   sendingCount,
   sendingLog,
   isSending,
+  isCanceled,
+  handleCancelClick,
 }) => {
   return (
     <div
@@ -21,13 +23,13 @@ const SendingModal = ({
         bg-white rounded-xl shadow p-6 transition-all
         ${
           open
-            ? "scale-100 opacity-100 overflow-scroll w-[600px] h-[400px] "
+            ? "scale-100 opacity-100 overflow-scroll w-[700px] h-[500px] "
             : "scale-125 opacity-0 overflow-hidden  w-[600px] h-[400px] "
         }
         `}
       >
-        <div className="flex items-center overflow-auto justify-center w-[100%] h-[100%]">
-          <div className="h-full w-full overflow-auto border rounded-xl shadow-lg ring-1 ring-black/5 bg-white">
+        <div className="flex items-center overflow-auto justify-center w-[100%] h-[90%]">
+          <div className="h-[90%] w-full overflow-auto border rounded-xl shadow-lg ring-1 ring-black/5 bg-white">
             <div className="mt-3 px-4 text-sm font-medium flex items-center gap-2 text-neutral-700">
               <span className="inline-block h-2 w-2 rounded-full bg-blue-500 animate-pulse" />
               Sending... {sendingCount}
@@ -60,15 +62,39 @@ const SendingModal = ({
                   ...
                 </div>
               ) : (
-                <div
-                  className="p-2 text-xs leading-5 font-mono break-words
+                <div></div>
+              )}
+              {!isSending && (
+                <div>
+                  {!isCanceled.current ? (
+                    <div
+                      className="p-2 text-xs leading-5 font-mono break-words
                      odd:bg-white text-green-600 hover:bg-neutral-100/60 transition-colors rounded"
-                >
-                  All emails sent! You can now close the window
+                    >
+                      All emails sent! You can now close the window
+                    </div>
+                  ) : (
+                    <div
+                      className="p-2 text-xs leading-5 font-mono break-words
+                     odd:bg-white text-red-600 hover:bg-neutral-100/60 transition-colors rounded"
+                    >
+                      Sending aborted! You can now close the window
+                    </div>
+                  )}
                 </div>
               )}
             </div>
           </div>
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={handleCancelClick}
+            className="px-4 py-2 mt-2 rounded-md text-white shadow
+                     bg-gradient-to-r from-red-400 to-red-600 cursor-pointer hover:scale-110"
+          >
+            Cancel
+          </button>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useRef } from "react";
 
 import backgroundImage from "../assets/Background.png";
 
@@ -11,8 +11,8 @@ import SendingModal from "../components/SendingModal";
 
 const WriteEmailPage = ({ goldData }) => {
   const { authToken } = useContext(AuthContext);
-
   const [isSending, setIsSending] = useState(false);
+
   const [openModal, setOpenModal] = useState(false);
   const [openSendingModal, setOpenSendingModal] = useState();
   const [rawEmail, setRawEmail] = useState({
@@ -23,6 +23,8 @@ const WriteEmailPage = ({ goldData }) => {
   const [sendingCount, setSendingCount] = useState("0/0");
   const [sendingLog, setSendingLog] = useState([]);
 
+  const isCanceled = useRef(false);
+
   const handleApproveClick = (emailSubjectText, emailBodyText) => {
     setRawEmail({ subject: emailSubjectText, body: emailBodyText });
     toggleModal();
@@ -31,7 +33,8 @@ const WriteEmailPage = ({ goldData }) => {
 
   const sendEmails = async (validatedEmails) => {
     setOpenSendingModal(true);
-    if (validatedEmails.length > 0) {
+    isCanceled.current = false;
+    if (validatedEmails.length > 0 && !isCanceled.current) {
       setIsSending(true);
       setSendingCount(`${0}/${validatedEmails.length}`);
       setSendingLog([]);
@@ -41,6 +44,10 @@ const WriteEmailPage = ({ goldData }) => {
         min + Math.floor(Math.random() * (max - min + 1));
 
       for (let i = 0; i < validatedEmails.length; i++) {
+        if (isCanceled.current === true) {
+          setIsSending(false);
+          break;
+        }
         try {
           const response = await fetch(
             "https://gmail.googleapis.com/gmail/v1/users/me/messages/send",
@@ -83,6 +90,14 @@ const WriteEmailPage = ({ goldData }) => {
     }
   };
 
+  const handleCancelClick = () => {
+    if (isSending) {
+      if (confirm("Do you wish to cancel sending?")) {
+        isCanceled.current = true;
+      }
+    }
+  };
+
   return (
     <>
       <div
@@ -111,14 +126,19 @@ const WriteEmailPage = ({ goldData }) => {
       />
       <SendingModal
         open={openSendingModal}
-        onClose={() =>
-          isSending === false
-            ? setOpenSendingModal(false)
-            : alert("Window must be open while emails are being sent")
-        }
+        onClose={() => {
+          if (isSending === false) {
+            setOpenSendingModal(false);
+            isCanceled.current = false;
+          } else {
+            alert("Window must be open while emails are being sent");
+          }
+        }}
         sendingCount={sendingCount}
         sendingLog={sendingLog}
         isSending={isSending}
+        isCanceled={isCanceled}
+        handleCancelClick={handleCancelClick}
       ></SendingModal>
     </>
   );
