@@ -54,10 +54,10 @@ const FilterRecieversPage = ({ deliverGoldData }) => {
         throw new Error(`Could not fetch selected sheet`);
       }
       setBronzeData(null);
-      const rangesD1 = "ranges=D1-TOP!A1:G250&ranges=D1-BOTTOM!A1:G250";
-      const rangesD2 = "ranges=D2-TOP!A1:G250&ranges=D2-BOTTOM!A1:G250";
-      const rangesD3 = "ranges=D3-TOP!A1:G250&ranges=D3-BOTTOM!A1:G250";
-      const rangesNaia = "ranges=NAIA!A1:G250";
+      const rangesD1 = "ranges=D1-TOP!A1:G250&ranges=D1-BOTTOM!A1:G1000";
+      const rangesD2 = "ranges=D2-TOP!A1:G250&ranges=D2-BOTTOM!A1:G1000";
+      const rangesD3 = "ranges=D3-TOP!A1:G250&ranges=D3-BOTTOM!A1:G1000";
+      const rangesNaia = "ranges=NAIA!A1:1000";
       const sheetUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values:batchGet?${rangesD1}&${rangesD2}&${rangesD3}&${rangesNaia}`;
       const response = await fetch(sheetUrl, {
         headers: {
